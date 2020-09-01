@@ -1,7 +1,7 @@
 import { LinkedNode } from './LinkedNode'
 
 /**
- * 单链表
+ * 单向链表
  */
 export class LinkedList<T> {
 
