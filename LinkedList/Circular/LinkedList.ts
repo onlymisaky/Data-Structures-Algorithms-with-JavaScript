@@ -13,25 +13,44 @@ export class LinkedList<T> {
 
   find(element: T): LinkedNode<T> {
     let currentNode = this.head;
-    while (currentNode.element !== element) {
+    while (currentNode && currentNode.element !== element) {
       currentNode = currentNode.next;
     }
     return currentNode;
   }
 
   insert(newElement: T, element: T) {
-    const newNode = new LinkedNode(newElement);
     const currentNode = this.find(element);
-    newNode.next = currentNode.next;
-    currentNode.next = newNode;
+    if (currentNode) {
+      const newNode = new LinkedNode(newElement);
+      newNode.next = currentNode.next;
+      currentNode.next = newNode;
+    }
+  }
+
+  findPrev(element: T): LinkedNode<T> {
+    let currentNode = this.head;
+    while (currentNode && currentNode.next.element !== element) {
+      currentNode = currentNode.next;
+    }
+    return currentNode;
+  }
+
+  remove(element: T) {
+    const prevNode = this.findPrev(element);
+    if (prevNode) {
+      prevNode.next = prevNode.next.next;
+    }
   }
 
   dispaly() {
     let currentNode = this.head;
+    console.log('-------dispaly start-------');
     while (currentNode) {
       console.log(currentNode.element);
       currentNode = currentNode.next;
     }
+    console.log('-------dispaly end-------');
   }
 
 }
