@@ -3,7 +3,7 @@ import { head, z, s, q } from '../Data';
 
 /**
  * 边界情况
- * 1. find 一个存在的 element
+ * 1. find 一个不存在的 element
  * 2. remove 一个不存在的 element
  * 3. remove head
  */
