@@ -1,7 +1,7 @@
-import { LinkedNode } from '../Singly/LinkedNode';
+import { LinkedNode } from '../Doubly/LinkedNode';
 
 /**
- * 循环链表
+ * 双向链表
  */
 export class LinkedList<T>  {
   head: LinkedNode<T>;
@@ -9,18 +9,11 @@ export class LinkedList<T>  {
   constructor(element: T) {
     this.head = new LinkedNode(element);
     this.head.next = this.head;
+    this.head.prev = this.head;
   }
 
   isHead(element: T): boolean {
     return this.head.element === element;
-  }
-
-  findLast(): LinkedNode<T> {
-    let currentNode = this.head;
-    while (currentNode.next !== this.head) {
-      currentNode = currentNode.next;
-    }
-    return currentNode;
   }
 
   find(element: T): LinkedNode<T> | null {
@@ -32,52 +25,36 @@ export class LinkedList<T>  {
         currentNode = null;
       }
     }
-    return currentNode;
-  }
-
-  findPrev(element: T): LinkedNode<T> | null {
-    if (this.isHead(element)) {
-      return null;
-    }
-
-    let currentNode = this.head;
-    while (currentNode.next && currentNode.next.element !== element) {
-      if (currentNode.next !== this.head) {
-        currentNode = currentNode.next;
-      } else {
-        currentNode = null;
-      }
-    }
-    return currentNode;
+    return null;
   }
 
   insert(newElement: T, element: T): boolean {
     const currentNode = this.find(element);
     if (currentNode) {
+      const rawNextNode = currentNode.next;
       const newNode = new LinkedNode(newElement);
-      newNode.next = currentNode.next;
+      newNode.next = rawNextNode.next;
+      newNode.prev = currentNode;
       currentNode.next = newNode;
+      rawNextNode.prev = newNode;
       return true;
     }
     return false;
   }
 
   remove(element: T): boolean {
-    if (this.isHead(element) && this.head.next === this.head) {
+    if (this.isHead(element) && this.head.next.element === element) {
       return false;
     }
 
-    if (this.isHead(element)) {
-      this.head = this.head.next;
-      // 到底要不要这一步？
-      const lastNode = this.findLast();
-      lastNode.next = this.head;
-      return true;
-    }
-
-    const prevNode = this.findPrev(element);
-    if (prevNode && prevNode.next) {
-      prevNode.next = prevNode.next.next;
+    const currentNode = this.find(element);
+    if (currentNode) {
+      const rawPrevNode = currentNode.prev;
+      const rawNextNode = currentNode.next;
+      rawPrevNode.next = rawNextNode;
+      rawNextNode.prev = rawPrevNode;
+      currentNode.prev = null;
+      currentNode.next = null;
       return true;
     }
     return false;

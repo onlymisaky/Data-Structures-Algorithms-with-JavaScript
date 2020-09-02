@@ -11,6 +11,10 @@ export class LinkedList<T> {
     this.head = new LinkedNode(element);
   }
 
+  isHead(element: T): boolean {
+    return this.head.element === element;
+  }
+
   find(element: T): LinkedNode<T> | null {
     let currentNode = this.head;
     while (currentNode && currentNode.element !== element) {
@@ -20,15 +24,15 @@ export class LinkedList<T> {
   }
 
   findLast(): LinkedNode<T> {
+    if (!this.head.next) {
+      return this.head;
+    }
+
     let currentNode = this.head;
     while (currentNode.next !== null) {
       currentNode = currentNode.next;
     }
     return currentNode;
-  }
-
-  isHead(element: T): boolean {
-    return this.head.element === element;
   }
 
   insert(newElement: T, element: T): boolean {
@@ -48,12 +52,7 @@ export class LinkedList<T> {
   }
 
   remove(element: T): boolean {
-    if (this.isHead(element)) {
-      if (this.head.next) {
-        this.head = this.head.next;
-        this.head.prev = null;
-        return true;
-      }
+    if (this.isHead(element) && !this.head.next) {
       return false;
     }
 
