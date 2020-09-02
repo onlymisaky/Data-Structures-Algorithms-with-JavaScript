@@ -1,9 +1,5 @@
-import { LinkedList } from "./LinkedList";
-
-const head = { val: 'head' };
-const z = { val: 'z' };
-const s = { val: 's' };
-const q = { val: 'q' };
+import { LinkedList } from './LinkedList';
+import { head, z, s, q } from '../Data';
 
 /**
  * 边界情况
