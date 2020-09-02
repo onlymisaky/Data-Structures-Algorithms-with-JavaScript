@@ -19,7 +19,7 @@ export class LinkedList<T> {
     return currentNode;
   }
 
-  insert(newElement: T, element: T) {
+  insert(newElement: T, element: T): boolean {
     const currentNode = this.find(element);
     if (currentNode) {
       const newNode = new LinkedNode(newElement);
@@ -41,11 +41,11 @@ export class LinkedList<T> {
     return currentNode;
   }
 
-  isHead(element: T) {
+  isHead(element: T): boolean {
     return this.head.element === element;
   }
 
-  remove(element: T) {
+  remove(element: T): boolean {
     if (this.isHead(element)) {
       if (this.head.next) {
         this.head = this.head.next;
@@ -61,7 +61,7 @@ export class LinkedList<T> {
     return false;
   }
 
-  dispaly() {
+  dispaly(): void {
     let currentNode = this.head;
     console.log('>>> dispaly start:');
     while (currentNode) {

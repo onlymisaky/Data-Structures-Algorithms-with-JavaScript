@@ -19,11 +19,19 @@ export class LinkedList<T> {
     return currentNode;
   }
 
+  findLast(): LinkedNode<T> {
+    let currentNode = this.head;
+    while (currentNode.next !== null) {
+      currentNode = currentNode.next;
+    }
+    return currentNode;
+  }
+
   isHead(element: T): boolean {
     return this.head.element === element;
   }
 
-  insert(newElement: T, element: T) {
+  insert(newElement: T, element: T): boolean {
     const currentNode = this.find(element);
     if (currentNode) {
       const rawNextNode = currentNode.next;
@@ -39,7 +47,7 @@ export class LinkedList<T> {
     return false;
   }
 
-  remove(element: T) {
+  remove(element: T): boolean {
     if (this.isHead(element)) {
       if (this.head.next) {
         this.head = this.head.next;
@@ -64,7 +72,7 @@ export class LinkedList<T> {
     return false;
   }
 
-  dispaly() {
+  dispaly(): void {
     let currentNode = this.head;
     console.log('>>> dispaly start:');
     while (currentNode) {
