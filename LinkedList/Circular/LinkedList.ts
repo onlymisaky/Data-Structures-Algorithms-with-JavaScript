@@ -11,7 +11,7 @@ export class LinkedList<T> {
     this.head = new LinkedNode(element);
   }
 
-  find(element: T): LinkedNode<T> {
+  find(element: T): LinkedNode<T> | null {
     let currentNode = this.head;
     while (currentNode && currentNode.element !== element) {
       currentNode = currentNode.next;
@@ -25,32 +25,50 @@ export class LinkedList<T> {
       const newNode = new LinkedNode(newElement);
       newNode.next = currentNode.next;
       currentNode.next = newNode;
+      return true;
     }
+    return false;
   }
 
-  findPrev(element: T): LinkedNode<T> {
+  findPrev(element: T): LinkedNode<T> | null {
     let currentNode = this.head;
-    while (currentNode && currentNode.next.element !== element) {
+    if (currentNode.element === element) {
+      return null;
+    }
+    while (currentNode && currentNode.next && currentNode.next.element !== element) {
       currentNode = currentNode.next;
     }
     return currentNode;
   }
 
+  isHead(element: T) {
+    return this.head.element === element;
+  }
+
   remove(element: T) {
-    const prevNode = this.findPrev(element);
-    if (prevNode) {
-      prevNode.next = prevNode.next.next;
+    if (this.isHead(element)) {
+      if (this.head.next) {
+        this.head = this.head.next;
+        return true;
+      }
+      return false;
     }
+    const prevNode = this.findPrev(element);
+    if (prevNode && prevNode.next) {
+      prevNode.next = prevNode.next.next;
+      return true;
+    }
+    return false;
   }
 
   dispaly() {
     let currentNode = this.head;
-    console.log('-------dispaly start-------');
+    console.log('>>> dispaly start:');
     while (currentNode) {
       console.log(currentNode.element);
       currentNode = currentNode.next;
     }
-    console.log('-------dispaly end-------');
+    console.log('>>> dispaly end.\n\r');
   }
 
 }
