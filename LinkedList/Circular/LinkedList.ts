@@ -1,61 +1,65 @@
-import { LinkedNode } from './LinkedNode'
+import { LinkedList as DoublyLinkedList } from '../Doubly/LinkedList'
+import { LinkedNode } from '../Doubly/LinkedNode';
 
 /**
- * 单向链表
+ * 双向链表
  */
-export class LinkedList<T> {
-
+export class LinkedList<T>  {
+  length: number;
   head: LinkedNode<T>;
 
   constructor(element: T) {
     this.head = new LinkedNode(element);
+    this.head.next = this.head;
+    this.head.prev = this.head;
+    this.length = 1;
   }
 
   find(element: T): LinkedNode<T> | null {
     let currentNode = this.head;
-    while (currentNode && currentNode.element !== element) {
+    for (let i = 0; i < this.length; i++) {
+      if (currentNode.element === element) {
+        return currentNode;
+      }
       currentNode = currentNode.next;
     }
-    return currentNode;
-  }
-
-  insert(newElement: T, element: T): boolean {
-    const currentNode = this.find(element);
-    if (currentNode) {
-      const newNode = new LinkedNode(newElement);
-      newNode.next = currentNode.next;
-      currentNode.next = newNode;
-      return true;
-    }
-    return false;
-  }
-
-  findPrev(element: T): LinkedNode<T> | null {
-    let currentNode = this.head;
-    if (currentNode.element === element) {
-      return null;
-    }
-    while (currentNode && currentNode.next && currentNode.next.element !== element) {
-      currentNode = currentNode.next;
-    }
-    return currentNode;
+    return null;
   }
 
   isHead(element: T): boolean {
     return this.head.element === element;
   }
 
+  insert(newElement: T, element: T): boolean {
+    const currentNode = this.find(element);
+    if (currentNode) {
+      const rawNextNode = currentNode.next;
+      const newNode = new LinkedNode(newElement);
+      newNode.next = rawNextNode.next;
+      newNode.prev = currentNode;
+      currentNode.next = newNode;
+      rawNextNode.prev = newNode;
+      this.length++;
+      return true;
+    }
+    return false;
+  }
+
+
   remove(element: T): boolean {
-    if (this.isHead(element)) {
-      if (this.head.next) {
-        this.head = this.head.next;
-        return true;
-      }
+    if (this.isHead(element) && this.head.next.element === element) {
       return false;
     }
-    const prevNode = this.findPrev(element);
-    if (prevNode && prevNode.next) {
-      prevNode.next = prevNode.next.next;
+
+    const currentNode = this.find(element);
+    if (currentNode) {
+      const rawPrevNode = currentNode.prev;
+      const rawNextNode = currentNode.next;
+      rawPrevNode.next = rawNextNode;
+      rawNextNode.prev = rawPrevNode;
+      currentNode.prev = null;
+      currentNode.next = null;
+      this.length--;
       return true;
     }
     return false;
@@ -64,7 +68,7 @@ export class LinkedList<T> {
   dispaly(): void {
     let currentNode = this.head;
     console.log('>>> dispaly start:');
-    while (currentNode) {
+    for (let i = 0; i < this.length; i++) {
       console.log(currentNode.element);
       currentNode = currentNode.next;
     }
